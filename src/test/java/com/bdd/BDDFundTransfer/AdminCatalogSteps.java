@@ -16,7 +16,9 @@ public class AdminCatalogSteps {
     private static final By LOC_PRODUCTS = By.cssSelector("#collapse1 li:nth-child(2)");
     private static final By LOC_PRODUCT_NAME = By.cssSelector("input[name='filter_name']");
     private static final By LOC_FILTER = By.cssSelector("#button-filter");
-    private static final By LOC_SEARCH_RESULT_TEXT= By.cssSelector("tbody td:nth-child(3)");
+    private static final By LOC_SEARCH_RESULT_TEXT = By.cssSelector("tbody td:nth-child(3)");
+    private static final By LOC_MANUFACTURER = By.cssSelector("#menu-catalog a[href*='manufacturer']");
+    private static final By LOC_MANUFACTURER_LIST = By.cssSelector("tbody td:nth-child(2)");
 
     @When("clicks on the {string}")
     public void clicksOnThe(String button) {
@@ -38,6 +40,8 @@ public class AdminCatalogSteps {
                 return LOC_PRODUCTS;
             case "Filter":
                 return LOC_FILTER;
+            case "Manufacturer":
+                return LOC_MANUFACTURER;
             default:
                 return null;
         }
@@ -65,5 +69,22 @@ public class AdminCatalogSteps {
                 );
             }
         }
+    }
+
+    @Then("I should see manufacturer name {string}")
+    public void iShouldSeeManufacturerName(String manufacturerName) {
+        List<WebElement> listResults = new ArrayList<>(Browser.driver.findElements(LOC_MANUFACTURER_LIST));
+
+        for(WebElement i : listResults) {
+            if(i.getText().contains(manufacturerName)) {
+                Assert.assertTrue(true);
+                return;
+            }
+        }
+        Assert.assertTrue(false,
+                "Expected: "
+                        + manufacturerName
+                        + " but Found none"
+        );
     }
 }
